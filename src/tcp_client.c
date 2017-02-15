@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	printf("Enter any key to continue.");
 	getchar();
 	//Binding on server IP
 	if(connect(client_sockfd, (struct sockaddr *)remote_addr, sizeof(struct sockaddr)) < 0)
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
 		len=send(client_sockfd, buf, strlen(buf), 0);
 		len=recv(client_sockfd, buf, BUFSIZ, 0);
 		//buf[len] = '\0';
-		printf("received:%s", buf);  
+		printf("Received: %s", buf);  
 	}  
 	close(client_sockfd);//Close socket
 	return 0;  

@@ -50,13 +50,15 @@ int main(int argc, char *argv[])
   
 	sin_size = sizeof(struct sockaddr_in);  
   
+	printf("Server is online.\n");
 	//Wait for the client request
 	if((client_sockfd = accept(server_sockfd, (struct sockaddr *)remote_addr, &sin_size)) < 0)  
 	{  
 		perror("accept");  
 		return 1;  
 	}  
-	printf("accept client %s\n", inet_ntoa(remote_addr->sin_addr));
+	char *ip_str_remote = inet_ntoa(remote_addr->sin_addr);
+	printf("accept client [%s]\n", ip_str_remote);
 	char *tmp = "Welcome to "SERVERNAME" server\n";
 //	len = send(client_sockfd,"Welcome to my server\n",21,0);//Send welcome information
 	len = send(client_sockfd, tmp, strlen(tmp), 0);//Send welcome information
@@ -65,7 +67,7 @@ int main(int argc, char *argv[])
 	while((len = recv(client_sockfd, buf, BUFSIZ, 0)) > 0)  
 	{  
 		//buf[len] = '\0';  
-		printf("%s", buf);  
+		printf("Received from [%s]: %s", ip_str_remote, buf);  
 		if(send(client_sockfd, buf, len, 0) < 0)  
 		{  
 			perror("write");  
