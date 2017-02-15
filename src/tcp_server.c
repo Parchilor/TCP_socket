@@ -22,6 +22,12 @@ int main(int argc, char *argv[])
 	socklen_t sin_size;
 	char buf[BUFSIZ];//Buffer of sending data
 
+	if(argc != 2)
+	{
+		printf("./server <port>\n");
+		return 0;
+	}
+
 	my_addr = malloc(sizeof(struct sockaddr_in));
 	remote_addr = malloc(sizeof(struct sockaddr_in));
 	memset(my_addr,0,sizeof(struct sockaddr_in));//Initialize datar
@@ -29,7 +35,7 @@ int main(int argc, char *argv[])
 
 	my_addr->sin_family = AF_INET;//Set to the IP communication
 	my_addr->sin_addr.s_addr = INADDR_ANY;//The IP address of server--allow any local address
-	my_addr->sin_port = htons(8000); //Port number of server
+	my_addr->sin_port = htons(atoi(argv[1])); //Port number of server
 
 	//Create socket
 	if((server_sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)  
@@ -68,6 +74,8 @@ int main(int argc, char *argv[])
 	{  
 		//buf[len] = '\0';  
 		printf("Received from [%s]: %s", ip_str_remote, buf);  
+		if(!strncmp(buf, "quit", 4))
+			break;
 		if(send(client_sockfd, buf, len, 0) < 0)  
 		{  
 			perror("write");  
